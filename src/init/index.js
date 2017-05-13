@@ -1,7 +1,9 @@
 import initConstruct from './construct';
-import initComplie from './compile';
+import initCompile from './compile';
+import initComputed from './computed';
 
 export default function init(co) {
-    initComplie(co);
     initConstruct(co);
+    initComputed(co);
+    initCompile(co);
 }
