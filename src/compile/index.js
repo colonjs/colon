@@ -73,9 +73,33 @@ Compile.prototype.compile.textNodes = function (node) {
     node.parentNode.removeChild(node);
 };
 
+/**
+ * bind directive
+ *
+ * @param {Object} options - directive options
+ */
 Compile.prototype.bindDirective = function (options) {
     new Directive({
         ...options,
         data: this.options.data,
+    });
+};
+
+/**
+ * bind attribute.
+ *
+ * @param {Node} node
+ * @param {Node} attribute
+ */
+Compile.prototype.bindAttribute = function (node, attribute) {
+    const [segments] = parse.text(attribute.value);
+
+    if (!segments) return void 0;
+
+    this.bindDirective({
+        node,
+        name: 'attribute',
+        expression: segments.value,
+        attrName: attribute.name,
     });
 };
