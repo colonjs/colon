@@ -3,6 +3,7 @@ import parse from './parse';
 import domify from './domify';
 import defaults from './defaults';
 import extend from '../utils/extend';
+import configure from '../configure';
 import Directive from '../directive';
 
 export default function Compile(template, options = {}) {
@@ -37,8 +38,37 @@ export default function Compile(template, options = {}) {
 
 Compile.prototype.compile = {};
 
-Compile.prototype.compile.elementNodes = function () {
-    // compile element nodes
+/**
+ * compile element nodes
+ *
+ * @param {Node} node
+ * @return {Void|Boolean}
+ */
+Compile.prototype.compile.elementNodes = function (node) {
+    let attributes = [].slice.call(node.attributes),
+        attrName = ``,
+        directiveName = ``,
+        expression = ``;
+
+    if (node.hasAttributes() && this.bindPriority(node)) return false;
+
+    attributes.map(attribute => {
+        attrName = attribute.name;
+        expression = attribute.value.trim();
+
+        if (attrName.indexOf(configure.identifier.bind) === 0) {
+            directiveName = attrName.slice(configure.identifier.bind.length);
+
+            this.bindDirective({
+                node,
+                expression,
+                name: directiveName,
+            });
+            node.removeAttribute(attrName);
+        } else {
+            this.bindAttribute(node, attribute);
+        }
+    });
 };
 
 /**
@@ -102,4 +132,33 @@ Compile.prototype.bindAttribute = function (node, attribute) {
         expression: segments.value,
         attrName: attribute.name,
     });
+};
+
+/**
+ * bind priority directive.
+ *
+ * @param {Node} node
+ * @return {Boolean}
+ */
+Compile.prototype.bindPriority = function (node) {
+    let expression,
+        directive;
+
+    for (let i = 0; i < configure.priority.length; i++) {
+        directive = configure.priority[i];
+        expression = node.getAttribute(`${configure.identifier.bind}${directive}`);
+
+        if (expression) {
+            expression = expression.trim();
+            node.removeAttribute(`${configure.identifier.bind}${directive}`);
+            this.bindDirective({
+                node,
+                name: directive,
+                expression,
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
 };
