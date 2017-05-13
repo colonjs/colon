@@ -1,7 +1,9 @@
 import walk from './walk';
+import parse from './parse';
 import domify from './domify';
 import defaults from './defaults';
 import extend from '../utils/extend';
+import Directive from '../directive';
 
 export default function Compile(template, options = {}) {
     if (!(this instanceof Compile)) return new Compile(template, options);
@@ -21,10 +23,10 @@ export default function Compile(template, options = {}) {
 
     walk(template, (node, next) => {
         if (node.nodeType === 1) {
-            const skip = this.compile.elementNodes(node);
+            const skip = this.compile.elementNodes.call(this, node);
             return next(skip === false);
         } else if (node.nodeType === 3) {
-            this.compile.textNodes(node);
+            this.compile.textNodes.call(this, node);
         }
         next();
     });
@@ -39,6 +41,41 @@ Compile.prototype.compile.elementNodes = function () {
     // compile element nodes
 };
 
-Compile.prototype.compile.textNodes = function () {
-    // compile text nodes
+/**
+ * compile text nodes.
+ *
+ * @param {Node} node
+ * @return {Void|Boolean}
+ */
+Compile.prototype.compile.textNodes = function (node) {
+    if (node.textContent.trim() === '') return false;
+
+    const segments = parse.text(node.textContent);
+
+    if (!segments.length) return false;
+
+    segments.map(segment => {
+        // if is directive text node.
+        if (segment.isDirective) {
+            const el = document.createTextNode('');
+            node.parentNode.insertBefore(el, node);
+            this.bindDirective({
+                node: el,
+                name: 'text',
+                expression: segment.value,
+            });
+        } else {
+            // common text node
+            node.parentNode.insertBefore(document.createTextNode(segment.value), node);
+        }
+    });
+
+    node.parentNode.removeChild(node);
+};
+
+Compile.prototype.bindDirective = function (options) {
+    new Directive({
+        ...options,
+        data: this.options.data,
+    });
 };
