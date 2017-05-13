@@ -111,6 +111,7 @@ Compile.prototype.compile.textNodes = function (node) {
 Compile.prototype.bindDirective = function (options) {
     new Directive({
         ...options,
+        co: this.co,
         data: this.options.data,
     });
 };
