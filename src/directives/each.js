@@ -1,4 +1,5 @@
 import configure from '../configure';
+import colon from '../index';
 
 export default {
     bind() {
@@ -11,14 +12,14 @@ export default {
         let fragment = document.createDocumentFragment();
 
         data.map((item, index) => {
-            const co = this.co.$Compile({
+            const co = colon({
                 template: this.node.cloneNode(true),
                 data: {
                     item,
                     index,
                 },
             });
-            fragment.appendChild(co.template);
+            fragment.appendChild(co.options.template);
         });
 
         this.holder.parentNode.replaceChild(fragment, this.holder);

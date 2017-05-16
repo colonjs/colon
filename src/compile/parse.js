@@ -2,8 +2,6 @@ const tagRE = /\{?\{\{(.+?)\}\}\}?/g;
 
 export default {
     text(text) {
-        if (text.trim() == '' || !tagRE.test(text)) return [];
-
         let segments = [],
             value,
             index,
@@ -21,7 +19,7 @@ export default {
             }
             value = matched[1].trim();
             segments.push({
-                isDirective: true,
+                needCompute: true,
                 value,
             });
             nextIndex = index + matched[0].length;
@@ -33,6 +31,12 @@ export default {
             });
         }
 
-        return segments;
+        const expression = segments.map(segment => {
+            if (segment.value.trim() == '' || !segment.needCompute) segment.value = `"${segment.value}"`;
+            if (segment.needCompute) segment.value = `colon.get("${segment.value}")`;
+            return segment.value;
+        }).join('+');
+
+        return expression;
     },
 };

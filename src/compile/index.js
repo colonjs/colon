@@ -5,6 +5,7 @@ import defaults from './defaults';
 import extend from '../utils/extend';
 import configure from '../configure';
 import Directive from '../directive';
+import { hasInterpolation } from './utils';
 
 export default function Compile(template, options = {}) {
     if (!(this instanceof Compile)) return new Compile(template, options);
@@ -47,21 +48,21 @@ Compile.prototype.compile = {};
 Compile.prototype.compile.elementNodes = function (node) {
     let attributes = [].slice.call(node.attributes),
         attrName = ``,
-        directiveName = ``,
-        expression = ``;
+        attrValue = ``,
+        directiveName = ``;
 
     if (node.hasAttributes() && this.bindPriority(node)) return false;
 
     attributes.map(attribute => {
         attrName = attribute.name;
-        expression = attribute.value.trim();
+        attrValue = attribute.value.trim();
 
-        if (attrName.indexOf(configure.identifier.bind) === 0) {
+        if (attrName.indexOf(configure.identifier.bind) === 0 && attrValue !== '') {
             directiveName = attrName.slice(configure.identifier.bind.length);
 
             this.bindDirective({
                 node,
-                expression,
+                expression: parse.text(attrValue),
                 name: directiveName,
             });
             node.removeAttribute(attrName);
@@ -79,25 +80,12 @@ Compile.prototype.compile.elementNodes = function (node) {
  */
 Compile.prototype.compile.textNodes = function (node) {
     if (node.textContent.trim() === '') return false;
-
-    const segments = parse.text(node.textContent);
-
-    if (!segments.length) return false;
-
-    segments.map(segment => {
-        // if is directive text node.
-        if (segment.isDirective) {
-            const el = document.createTextNode('');
-            node.parentNode.insertBefore(el, node);
-            this.bindDirective({
-                node: el,
-                name: 'text',
-                expression: segment.value,
-            });
-        } else {
-            // common text node
-            node.parentNode.insertBefore(document.createTextNode(segment.value), node);
-        }
+    const el = document.createTextNode('');
+    node.parentNode.insertBefore(el, node);
+    this.bindDirective({
+        node: el,
+        name: 'text',
+        expression: parse.text(node.textContent),
     });
 
     node.parentNode.removeChild(node);
@@ -112,7 +100,6 @@ Compile.prototype.bindDirective = function (options) {
     new Directive({
         ...options,
         co: this.co,
-        data: this.options.data,
     });
 };
 
@@ -123,14 +110,12 @@ Compile.prototype.bindDirective = function (options) {
  * @param {Node} attribute
  */
 Compile.prototype.bindAttribute = function (node, attribute) {
-    const [segments] = parse.text(attribute.value);
-
-    if (!segments) return void 0;
+    if (!hasInterpolation(attribute.value) || attribute.value.trim() == '') return false;
 
     this.bindDirective({
         node,
         name: 'attribute',
-        expression: segments.value,
+        expression: parse.text(attribute.value),
         attrName: attribute.name,
     });
 };
@@ -142,21 +127,24 @@ Compile.prototype.bindAttribute = function (node, attribute) {
  * @return {Boolean}
  */
 Compile.prototype.bindPriority = function (node) {
-    let expression,
+    let attrValue,
         directive;
 
     for (let i = 0; i < configure.priority.length; i++) {
         directive = configure.priority[i];
-        expression = node.getAttribute(`${configure.identifier.bind}${directive}`);
+        attrValue = node.getAttribute(`${configure.identifier.bind}${directive}`);
 
-        if (expression) {
-            expression = expression.trim();
+        if (attrValue) {
+            attrValue = attrValue.trim();
+            if (!attrValue) return false;
+
             node.removeAttribute(`${configure.identifier.bind}${directive}`);
             this.bindDirective({
                 node,
                 name: directive,
-                expression,
+                expression: parse.text(attrValue),
             });
+
             return true;
         } else {
             return false;
