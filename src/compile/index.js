@@ -62,7 +62,7 @@ Compile.prototype.compile.elementNodes = function (node) {
 
             this.bindDirective({
                 node,
-                expression: parse.text(attrValue),
+                expression: parse.expression(attrValue),
                 name: directiveName,
             });
             node.removeAttribute(attrName);
@@ -115,7 +115,7 @@ Compile.prototype.bindAttribute = function (node, attribute) {
     this.bindDirective({
         node,
         name: 'attribute',
-        expression: parse.text(attribute.value),
+        expression: parse.expression(attribute.value),
         attrName: attribute.name,
     });
 };
@@ -142,7 +142,7 @@ Compile.prototype.bindPriority = function (node) {
             this.bindDirective({
                 node,
                 name: directive,
-                expression: parse.text(attrValue),
+                expression: parse.expression(attrValue),
             });
 
             return true;
