@@ -1,8 +1,10 @@
 {
   "name": "colon",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "colon: JavaScript template engine.",
-  "main": "src/index.js",
+  "main": "dist/colon.js",
+  "module": "dist/meitu-jsonp.es.js",
+  "moduleName": "colon",
   "scripts": {
     "start": "npm run watch",
     "watch": "NODE_ENV=development rollup -w -c rollup.config.js",

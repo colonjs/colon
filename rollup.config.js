@@ -2,6 +2,7 @@ import babel from 'rollup-plugin-babel';
 import uglify from 'rollup-plugin-uglify';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 
+const packages = require('./package.json');
 const paths = {
     root: '/',
     source: {
@@ -12,18 +13,19 @@ const paths = {
     },
 };
 
-let fileName,
-    Configure;
+let fileName, configure;
 
-fileName = process.env.NODE_ENV === 'development' ? 'colon' : 'colon.min';
+fileName = process.env.NODE_ENV === 'development' ? packages.name : `${packages.name}.min`;
 
-Configure = {
-    format: 'umd', // 'amd', 'cjs', 'es', 'iife', 'umd'
+configure = {
     moduleName: 'colon',
     moduleId: 'colon',
     entry: `${paths.source.root}index.js`,
-    dest: `${paths.dist.root}${fileName}.js`,
     sourceMap: true,
+    targets: [{
+        dest: `${paths.dist.root}${fileName}.js`,
+        format: 'umd',
+    }],
     plugins: [
         babel(),
         sourcemaps(),
@@ -31,7 +33,12 @@ Configure = {
 };
 
 if (process.env.NODE_ENV === 'production') {
-    Configure.plugins.push(uglify());
+    configure.plugins.push(uglify());
+} else {
+    configure.targets.push({
+        dest: `${paths.dist.root}${fileName}.es.js`,
+        format: 'es',
+    });
 }
 
-export default Configure;
+export default configure;
