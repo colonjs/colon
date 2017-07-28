@@ -1,4 +1,1 @@
-export function hasInterpolation(text) {
-    const tagRE = /\{?\{\{(.+?)\}\}\}?/g;
-    return tagRE.test(text);
-}
+export const hasInterpolation = text => /\{?\{\{(.+?)\}\}\}?/g.test(text);

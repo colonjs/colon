@@ -2,16 +2,15 @@ const expressionRE = /"[^"]*"|'[^']*'|\.\w*[a-zA-Z$_]\w*|\w*[a-zA-Z$_]\w*:|(\w*[
 const globals = ['true', 'false', 'undefined', 'null', 'NaN', 'typeof', 'in'];
 
 export function generate(expression) {
-    let dependenciesCode = '';
     const dependencies = extractDependencies(expression);
+    let dependenciesCode = '';
 
 	for(let i = 0; i < dependencies.length; i++) {
         const dependency = dependencies[i];
-        dependenciesCode += `var ${dependency} = colon.get("${dependency}"); `;
+        dependenciesCode += `var ${dependency} = this.get("${dependency}"); `;
 	}
 
-    const code = `${dependenciesCode}return ${expression};`;
-    return new Function('colon', code);
+    return new Function(`${dependenciesCode}return ${expression};`);
 }
 
 export function extractDependencies(expression) {

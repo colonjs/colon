@@ -33,7 +33,7 @@ export default function Compile(template, options = {}) {
         next();
     });
 
-    this.template = template;
+    this.view = template;
     template = null;
 }
 

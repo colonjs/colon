@@ -13,6 +13,6 @@ export default class Directive {
     bindData() {
         if (!this.expression) return;
         this.bind && this.bind();
-        this.update && this.update(generate(this.expression)(this.co));
+        this.update && this.update(generate(this.expression).call(this.co));
     }
 }
