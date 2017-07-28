@@ -7,9 +7,6 @@ export default function initConstruct(co) {
         let expressions = expression.split('.'),
             data = this.data;
 
-        if (expression === `true`) return true;
-        if (expression === `false`) return false;
-
         expressions.map(expression => {
             data = data && data[expression];
         });

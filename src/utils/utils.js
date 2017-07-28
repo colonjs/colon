@@ -1,7 +1,3 @@
-export function buildCompute(expression) {
-    return new Function('colon', `return ${expression};`);
-}
-
 export function type(object) {
     let class2type = {},
         type = class2type.toString.call(object),

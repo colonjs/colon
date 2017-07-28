@@ -1,5 +1,5 @@
 import directives from './directives/index';
-import { buildCompute } from './utils/utils';
+import { generate } from './compile/generate';
 
 export default class Directive {
     constructor(options = {}) {
@@ -13,6 +13,6 @@ export default class Directive {
     bindData() {
         if (!this.expression) return;
         this.bind && this.bind();
-        this.update && this.update(buildCompute(this.expression)(this.co));
+        this.update && this.update(generate(this.expression)(this.co));
     }
 }
