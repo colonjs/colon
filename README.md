@@ -1,6 +1,7 @@
 # :colon - JavaScript template engine.
 
-Tiny, fastest and concise template engine. Only browser side is supported for the time being.
+<p align="center">Tiny, fastest and concise template engine.</p>
+<p align="center">Only browser side is supported for the time being.</p>
 
 <p align="center">
     <a href="https://travis-ci.org/colonjs/colon">
