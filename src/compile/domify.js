@@ -5,7 +5,7 @@
  * @return {DOM}
  */
 export default function domify(DOMString) {
-    let html = document.implementation.createHTMLDocument();
+    const html = document.implementation.createHTMLDocument();
 
     html.body.innerHTML = DOMString;
 

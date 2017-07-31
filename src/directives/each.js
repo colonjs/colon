@@ -9,7 +9,7 @@ export default {
     update(data) {
         if (data && !Array.isArray(data)) return;
 
-        let fragment = document.createDocumentFragment();
+        const fragment = document.createDocumentFragment();
 
         data.map((item, index) => {
             const co = colon({

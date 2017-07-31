@@ -1,13 +1,11 @@
 export function type(object) {
-    let class2type = {},
-        type = class2type.toString.call(object),
-        typeString = 'Boolean Number String Function Array Date RegExp Object Error Symbol';
+    const class2type = {};
+    const type = class2type.toString.call(object);
+    const typeString = 'Boolean Number String Function Array Date RegExp Object Error Symbol';
 
     if (object == null) return `${object}`;
 
-    typeString.split(' ').forEach((type) => {
-        class2type[`[object ${type}]`] = type.toLowerCase();
-    });
+    typeString.split(' ').forEach(type => class2type[`[object ${type}]`] = type.toLowerCase());
 
     return (
         typeof object === 'object' ||
@@ -20,13 +18,13 @@ export function type(object) {
 }
 
 export function isPlainObject(object) {
-    let prototype,
-        ctor,
-        class2type = {},
-        toString = class2type.toString,
-        hasOwn = class2type.hasOwnProperty,
-        fnToString = hasOwn.toString,
-        ObjectFunctionString = fnToString.call( Object );
+    const class2type = {};
+    const toString = class2type.toString;
+    const hasOwn = class2type.hasOwnProperty;
+    const fnToString = hasOwn.toString;
+    const ObjectFunctionString = fnToString.call(Object);
+
+    let prototype, ctor;
 
     if (!object || toString.call(object) !== '[object Object]') return false;
 

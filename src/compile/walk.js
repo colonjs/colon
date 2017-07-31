@@ -6,7 +6,7 @@
  * @param {Function} done
  */
 export default function walk(el, action, done) {
-    let nodes = [].slice.call(el.childNodes);
+    const nodes = el.childNodes && [].slice.call(el.childNodes);
 
     done = done || function () {};
     action = action || function () {};
