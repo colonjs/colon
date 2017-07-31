@@ -12,6 +12,7 @@ export default class Directive {
 
     bindData() {
         if (!this.expression) return;
+        if (this.name == 'text') this.expression = JSON.stringify(this.expression);
         this.bind && this.bind();
         this.update && this.update(generate(this.expression).call(this.co));
     }

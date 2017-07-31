@@ -2,7 +2,7 @@ const tagRE = /\{\{((?:.|\n)+?)\}\}/g;
 
 export default {
     text(text) {
-        if (!tagRE.test(text)) return text;
+        if (!tagRE.test(text)) return JSON.stringify(text);
 
         const tokens = [];
         let lastIndex = tagRE.lastIndex = 0;

@@ -1,8 +1,8 @@
 {
   "name": "colon",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "colon: JavaScript template engine.",
-  "main": "dist/colon.js",
+  "main": "src/index.js",
   "module": "dist/meitu-jsonp.es.js",
   "moduleName": "colon",
   "scripts": {
