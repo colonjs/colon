@@ -3,7 +3,7 @@
   "version": "1.2.3",
   "description": "colon: JavaScript template engine.",
   "main": "src/index.js",
-  "module": "dist/meitu-jsonp.es.js",
+  "module": "dist/colon.es.js",
   "moduleName": "colon",
   "scripts": {
     "start": "npm run watch",
