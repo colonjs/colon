@@ -3,8 +3,12 @@
 Tiny, fastest and concise template engine. Only browser side is supported for the time being.
 
 <p align="center">
-    [![Travis-ci](https://travis-ci.org/colonjs/colon.svg?branch=master)](https://travis-ci.org/colonjs/colon)
-    [![npm](https://img.shields.io/npm/v/colon.svg)](https://www.npmjs.com/package/colon)
+    <a href="https://travis-ci.org/colonjs/colon">
+        <img src="https://travis-ci.org/colonjs/colon.svg?branch=master" alt="Travis-ci">
+    </a>
+    <a href="https://www.npmjs.com/package/colon">
+        <img src="https://img.shields.io/npm/v/colon.svg" alt="npm">
+    </a>
 </p>
 
 ## Usage
