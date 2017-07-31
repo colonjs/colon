@@ -1,8 +1,8 @@
-# :colon - JavaScript template engine.
+<!-- README.md -->
 
+<h1 align="center">:colon - JavaScript template engine.</h1>
 <p align="center">Tiny, fastest and concise template engine.</p>
 <p align="center">Only browser side is supported for the time being.</p>
-
 <p align="center">
     <a href="https://travis-ci.org/colonjs/colon">
         <img src="https://travis-ci.org/colonjs/colon.svg?branch=master" alt="Travis-ci">
