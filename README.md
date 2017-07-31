@@ -10,12 +10,15 @@
     <a href="https://www.npmjs.com/package/colon">
         <img src="https://img.shields.io/npm/v/colon.svg" alt="npm">
     </a>
+    <a href="https://github.com/colonjs/colon/blob/master/LICENSE">
+        <img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT License">
+    </a>
 </p>
 
-## Usage
+### Usage
 
 See [the website](https://colonjs.github.io/).
 
-## License
+### License
 
 Licensed under the [MIT License](https://github.com/colonjs/colon/blob/master/LICENSE) by 大板栗
