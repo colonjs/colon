@@ -1,4 +1,5 @@
-dist
+dist/*.es.js
+dist/*.es.js.map
 node_modules
 npm-debug.log
 example
