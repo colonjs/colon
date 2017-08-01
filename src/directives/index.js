@@ -3,6 +3,7 @@ import src from './src';
 import show from './show';
 import text from './text';
 import each from './each';
+import style from './style';
 import attribute from './attribute';
 
 export default {
@@ -11,5 +12,6 @@ export default {
     show,
     text,
     each,
+    style,
     attribute,
 };
