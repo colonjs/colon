@@ -12,6 +12,5 @@ export default {
                 item ? addClass(this.node, i) : removeClass(this.node, i);
             }
         });
-        console.log(this.node);
     },
 };
