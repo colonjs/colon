@@ -8,10 +8,16 @@
         <img src="https://travis-ci.org/colonjs/colon.svg?branch=master" alt="Travis-ci">
     </a>
     <a href="https://www.npmjs.com/package/colon">
-        <img src="https://img.shields.io/npm/v/colon.svg" alt="npm">
+        <img src="https://img.shields.io/npm/v/colon.svg" alt="npm version">
+    </a>
+    <a href="https://www.npmjs.com/package/colon">
+        <img src="https://img.shields.io/npm/dt/colon.svg" alt="npm downloads">
+    </a>
+    <a href="javascript:;">
+        <img src="https://img.shields.io/github/size/colonjs/colon/dist/colon.min.js.svg" alt="size">
     </a>
     <a href="https://github.com/colonjs/colon/blob/master/LICENSE">
-        <img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="MIT License">
+        <img src="https://img.shields.io/github/license/colonjs/colon.svg" alt="MIT License">
     </a>
 </p>
 
