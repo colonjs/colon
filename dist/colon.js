@@ -85,13 +85,7 @@ var defaults = {
 
 var _typeof$1 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-function format(name, separator) {
-    var RE = /([a-z]|(?:[A-Z0-9]+))([A-Z0-9]|$)/g;
 
-    return name.replace(RE, function (_, $1, $2) {
-        return $1 + ($2 && (separator || '-') + $2);
-    }).toLowerCase();
-}
 
 function each(items, callback) {
     var len = void 0,
@@ -286,10 +280,10 @@ var style = {
         each(style, function (item, i) {
             if (type(item) === 'object') {
                 each(item, function (value, key) {
-                    return _this.node.style[format(key)] = value;
+                    return _this.node.style[key] = value;
                 });
             } else {
-                _this.node.style[format(i)] = item;
+                _this.node.style[i] = item;
             }
         });
     }
