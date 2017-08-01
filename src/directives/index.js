@@ -4,6 +4,7 @@ import show from './show';
 import text from './text';
 import each from './each';
 import style from './style';
+import clus from './class';
 import attribute from './attribute';
 
 export default {
@@ -13,5 +14,6 @@ export default {
     text,
     each,
     style,
+    clus,
     attribute,
 };
