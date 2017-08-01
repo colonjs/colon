@@ -2,7 +2,7 @@ import walk from './walk';
 import parse from './parse';
 import domify from './domify';
 import defaults from './defaults';
-import extend from '../utils/extend';
+import extend from '../common/extend';
 import configure from '../configure';
 import Directive from '../directive';
 import { hasInterpolation } from './utils';
