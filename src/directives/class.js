@@ -5,11 +5,10 @@ export default {
     update(clus) {
         each(clus, (item, i) => {
             if (type(item) === 'object') {
-                each(item, (value, key) => {
-                    value ? addClass(this.node, key) : removeClass(this.node, key);
-                });
+                each(item, (value, key) => value ? addClass(this.node, key) : removeClass(this.node, key));
             } else {
-                item ? addClass(this.node, i) : removeClass(this.node, i);
+                const className = type(i) === 'number' ? item : i;
+                item ? addClass(this.node, className) : removeClass(this.node, className);
             }
         });
     },
