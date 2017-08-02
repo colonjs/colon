@@ -1,5 +1,9 @@
 const expressionRE = /"[^"]*"|'[^']*'|\.\w*[a-zA-Z$_]\w*|\w*[a-zA-Z$_]\w*:|(\w*[a-zA-Z$_]\w*)/g;
-const globals = ['true', 'false', 'undefined', 'null', 'NaN', 'typeof', 'in'];
+const globals = [
+    'true', 'false', 'undefined', 'null', 'NaN', 'isNaN', 'typeof', 'in',
+    'decodeURI', 'decodeURIComponent', 'encodeURI', 'encodeURIComponent', 'unescape',
+    'escape', 'eval', 'isFinite', 'Number', 'String', 'parseFloat', 'parseInt',
+];
 
 export function generate(expression) {
     const dependencies = extractDependencies(expression);
@@ -16,13 +20,13 @@ export function generate(expression) {
 export function extractDependencies(expression) {
     const dependencies = [];
 
-    expression.replace(expressionRE, function(match, reference) {
+    expression.replace(expressionRE, (match, dependency) => {
         if(
-            reference !== undefined &&
-            dependencies.indexOf(reference) === -1 &&
-            globals.indexOf(reference) === -1
+            dependency !== undefined &&
+            dependencies.indexOf(dependency) === -1 &&
+            globals.indexOf(dependency) === -1
         ) {
-            dependencies.push(reference);
+            dependencies.push(dependency);
         }
     });
 

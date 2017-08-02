@@ -366,7 +366,7 @@ var directives = {
 };
 
 var expressionRE = /"[^"]*"|'[^']*'|\.\w*[a-zA-Z$_]\w*|\w*[a-zA-Z$_]\w*:|(\w*[a-zA-Z$_]\w*)/g;
-var globals = ['true', 'false', 'undefined', 'null', 'NaN', 'typeof', 'in'];
+var globals = ['true', 'false', 'undefined', 'null', 'NaN', 'isNaN', 'typeof', 'in', 'decodeURI', 'decodeURIComponent', 'encodeURI', 'encodeURIComponent', 'unescape', 'escape', 'eval', 'isFinite', 'Number', 'String', 'parseFloat', 'parseInt'];
 
 function generate(expression) {
     var dependencies = extractDependencies(expression);
@@ -383,9 +383,9 @@ function generate(expression) {
 function extractDependencies(expression) {
     var dependencies = [];
 
-    expression.replace(expressionRE, function (match, reference) {
-        if (reference !== undefined && dependencies.indexOf(reference) === -1 && globals.indexOf(reference) === -1) {
-            dependencies.push(reference);
+    expression.replace(expressionRE, function (match, dependency) {
+        if (dependency !== undefined && dependencies.indexOf(dependency) === -1 && globals.indexOf(dependency) === -1) {
+            dependencies.push(dependency);
         }
     });
 
