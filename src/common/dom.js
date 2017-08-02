@@ -1,3 +1,4 @@
+// reference: https://github.com/vuejs/vue/blob/dev/src/platforms/web/runtime/class-util.js#L7-L26
 export function addClass(el, cls) {
     if (!cls || !(cls = cls.trim())) return;
 
@@ -15,6 +16,7 @@ export function addClass(el, cls) {
     }
 }
 
+// reference: https://github.com/vuejs/vue/blob/dev/src/platforms/web/runtime/class-util.js#L32-L61
 export function removeClass(el, cls) {
     if (!cls || !(cls = cls.trim())) return;
 

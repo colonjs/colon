@@ -290,6 +290,7 @@ var style = {
     }
 };
 
+// reference: https://github.com/vuejs/vue/blob/dev/src/platforms/web/runtime/class-util.js#L7-L26
 function addClass(el, cls) {
     if (!cls || !(cls = cls.trim())) return;
 
@@ -309,6 +310,7 @@ function addClass(el, cls) {
     }
 }
 
+// reference: https://github.com/vuejs/vue/blob/dev/src/platforms/web/runtime/class-util.js#L32-L61
 function removeClass(el, cls) {
     if (!cls || !(cls = cls.trim())) return;
 
