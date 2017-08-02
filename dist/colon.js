@@ -42,6 +42,7 @@ var tagRE = /\{\{((?:.|\n)+?)\}\}/g;
 
 var parse = {
     text: function text(_text) {
+        // reference: https://github.com/vuejs/vue/blob/dev/src/compiler/parser/text-parser.js#L15-L41
         if (!tagRE.test(_text)) return JSON.stringify(_text);
 
         var tokens = [];

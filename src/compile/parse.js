@@ -2,6 +2,7 @@ const tagRE = /\{\{((?:.|\n)+?)\}\}/g;
 
 export default {
     text(text) {
+        // reference: https://github.com/vuejs/vue/blob/dev/src/compiler/parser/text-parser.js#L15-L41
         if (!tagRE.test(text)) return JSON.stringify(text);
 
         const tokens = [];

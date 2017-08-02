@@ -51,6 +51,10 @@ See [the website](https://colonjs.github.io/).
 
 `colon` has a more concise template syntax.
 
+### Thanks
+
+- syntax inspired by [Vue](https://github.com/vuejs/vue)
+
 ### License
 
 Licensed under the [MIT License](https://github.com/colonjs/colon/blob/master/LICENSE) by 大板栗
