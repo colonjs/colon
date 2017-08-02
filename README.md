@@ -2,7 +2,7 @@
 <p align="center">
     <img src="logo.png" alt="colon">
 </p>
-<h1 align="center">:colon - JavaScript template engine.</h1>
+<h1 align="center">colon:</h1>
 <p align="center">Minimal, concise and blazing fast template engine.</p>
 <p align="center">Server side render is coming.</p>
 <p align="center">
