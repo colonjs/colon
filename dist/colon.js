@@ -247,10 +247,46 @@ var text = {
     }
 };
 
+var _slicedToArray$1 = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var each$1 = {
     bind: function bind() {
         this.holder = document.createComment('' + configure.identifier.bind + this.name);
         this.node.parentNode.replaceChild(this.holder, this.node);
+
+        // parse alias
+        this.itemName = 'item';
+        this.indexName = 'index';
+        this.dataName = this.expression;
+
+        if (this.expression.indexOf(' in ') != -1) {
+            var bracketRE = /\(((?:.|\n)+?)\)/g;
+
+            var _expression$split = this.expression.split(' in '),
+                _expression$split2 = _slicedToArray$1(_expression$split, 2),
+                item = _expression$split2[0],
+                data = _expression$split2[1];
+
+            var matched = null;
+
+            if (matched = bracketRE.exec(item)) {
+                var _matched$1$split = matched[1].split(','),
+                    _matched$1$split2 = _slicedToArray$1(_matched$1$split, 2),
+                    _item = _matched$1$split2[0],
+                    index = _matched$1$split2[1];
+
+                index ? this.indexName = index.trim() : '';
+                this.itemName = _item.trim();
+            } else {
+                this.itemName = item.trim();
+            }
+
+            this.dataName = data.trim();
+        }
+
+        this.expression = this.dataName;
     },
     update: function update(data) {
         var _this = this;
@@ -260,12 +296,11 @@ var each$1 = {
         var fragment = document.createDocumentFragment();
 
         data.map(function (item, index) {
+            var _data;
+
             var co = colon({
                 template: _this.node.cloneNode(true),
-                data: {
-                    item: item,
-                    index: index
-                }
+                data: (_data = {}, _defineProperty(_data, _this.itemName, item), _defineProperty(_data, _this.indexName, index), _data)
             });
             fragment.appendChild(co.options.template);
         });
