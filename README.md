@@ -57,4 +57,4 @@ See [the website](https://colonjs.github.io/).
 
 ### License
 
-Licensed under the [MIT License](https://github.com/colonjs/colon/blob/master/LICENSE) by 大板栗
+Licensed under the [MIT License](https://github.com/colonjs/colon/blob/master/LICENSE)
