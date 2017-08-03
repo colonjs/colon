@@ -45,7 +45,7 @@ See [the website](https://colonjs.github.io/).
 ```html
 <h1>{{ title }}</h1>
 <ul>
-    <li :each="author in authors" :class="[index == 0 ? 'first' : '']">{{ author }}</li>
+    <li :each="(author, index) in authors" :class="[index == 0 ? 'first' : '']">{{ author }}</li>
 </ul>
 ```
 
