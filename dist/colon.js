@@ -403,17 +403,16 @@ var directives = {
     attribute: attribute
 };
 
-var expressionRE = /"[^"]*"|'[^']*'|\.\w*[a-zA-Z$_]\w*|\w*[a-zA-Z$_]\w*:|(\w*[a-zA-Z$_]\w*)/g;
+var dependencyRE = /"[^"]*"|'[^']*'|\.\w*[a-zA-Z$_]\w*|\w*[a-zA-Z$_]\w*:|(\w*[a-zA-Z$_]\w*)/g;
 var globals = ['true', 'false', 'undefined', 'null', 'NaN', 'isNaN', 'typeof', 'in', 'decodeURI', 'decodeURIComponent', 'encodeURI', 'encodeURIComponent', 'unescape', 'escape', 'eval', 'isFinite', 'Number', 'String', 'parseFloat', 'parseInt'];
 
 function generate(expression) {
     var dependencies = extractDependencies(expression);
     var dependenciesCode = '';
 
-    for (var i = 0; i < dependencies.length; i++) {
-        var dependency = dependencies[i];
-        dependenciesCode += 'var ' + dependency + ' = this.get("' + dependency + '"); ';
-    }
+    dependencies.map(function (dependency) {
+        return dependenciesCode += 'var ' + dependency + ' = this.get("' + dependency + '"); ';
+    });
 
     return new Function(dependenciesCode + 'return ' + expression + ';');
 }
@@ -421,7 +420,7 @@ function generate(expression) {
 function extractDependencies(expression) {
     var dependencies = [];
 
-    expression.replace(expressionRE, function (match, dependency) {
+    expression.replace(dependencyRE, function (match, dependency) {
         if (dependency !== undefined && dependencies.indexOf(dependency) === -1 && globals.indexOf(dependency) === -1) {
             dependencies.push(dependency);
         }
