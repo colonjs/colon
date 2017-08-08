@@ -207,7 +207,7 @@ var configure = {
 };
 
 var IF = {
-    bind: function bind() {
+    beforeUpdate: function beforeUpdate() {
         this.holder = document.createComment('' + configure.identifier.bind + this.name);
         this.node.parentNode.replaceChild(this.holder, this.node);
     },
@@ -239,7 +239,7 @@ var _slicedToArray$1 = function () { function sliceIterator(arr, i) { var _arr =
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var each$1 = {
-    bind: function bind() {
+    beforeUpdate: function beforeUpdate() {
         this.holder = document.createComment('' + configure.identifier.bind + this.name);
         this.node.parentNode.replaceChild(this.holder, this.node);
 
@@ -429,7 +429,7 @@ var Directive = function Directive() {
     Object.assign(this, options);
     Object.assign(this, directives[this.name]);
 
-    this.bind && this.bind();
+    this.beforeUpdate && this.beforeUpdate();
     this.update && this.update(generate(this.expression)(this.compile.data));
 };
 

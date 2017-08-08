@@ -9,7 +9,7 @@ export default class Directive {
         Object.assign(this, options);
         Object.assign(this, directives[this.name]);
 
-        this.bind && this.bind();
+        this.beforeUpdate && this.beforeUpdate();
         this.update && this.update(generate(this.expression)(this.compile.data));
     }
 }

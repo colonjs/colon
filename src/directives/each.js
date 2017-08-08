@@ -2,7 +2,7 @@ import configure from '../configure';
 import colon from '../index';
 
 export default {
-    bind() {
+    beforeUpdate() {
         this.holder = document.createComment(`${configure.identifier.bind}${this.name}`);
         this.node.parentNode.replaceChild(this.holder, this.node);
 
