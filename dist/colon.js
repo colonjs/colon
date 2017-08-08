@@ -4,19 +4,6 @@
 	(global.colon = factory());
 }(this, (function () { 'use strict';
 
-function initConstruct(co) {
-  co.data = co.options.data || {};
-
-  /**
-   * Gets Value in Data
-   * @param {String} key
-   * @return {String} Value of key in data
-   */
-  co.get = function (key) {
-    return co.data[key];
-  };
-}
-
 /**
  * walk dom element
  *
@@ -411,10 +398,10 @@ function generate(expression) {
     var dependenciesCode = '';
 
     dependencies.map(function (dependency) {
-        return dependenciesCode += 'var ' + dependency + ' = this.get("' + dependency + '"); ';
+        return dependenciesCode += 'var ' + dependency + ' = data["' + dependency + '"]; ';
     });
 
-    return new Function(dependenciesCode + 'return ' + expression + ';');
+    return new Function('data', dependenciesCode + 'return ' + expression + ';');
 }
 
 function extractDependencies(expression) {
@@ -429,42 +416,27 @@ function extractDependencies(expression) {
     return dependencies;
 }
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Directive = function () {
-    function Directive() {
-        var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+var Directive = function Directive() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-        _classCallCheck(this, Directive);
+    _classCallCheck(this, Directive);
 
-        if (options.name === 'if') options.name = 'IF';
-        if (options.name === 'class') options.name = 'clus';
+    if (options.name === 'if') options.name = 'IF';
+    if (options.name === 'class') options.name = 'clus';
 
-        Object.assign(this, options);
-        Object.assign(this, directives[this.name]);
-        this.bindData();
-    }
+    Object.assign(this, options);
+    Object.assign(this, directives[this.name]);
 
-    _createClass(Directive, [{
-        key: 'bindData',
-        value: function bindData() {
-            if (!this.expression) return;
-            this.bind && this.bind();
-            this.update && this.update(generate(this.expression).call(this.co));
-        }
-    }]);
-
-    return Directive;
-}();
+    this.bind && this.bind();
+    this.update && this.update(generate(this.expression)(this.compile.data));
+};
 
 var hasInterpolation = function hasInterpolation(text) {
   return (/\{?\{\{(.+?)\}\}\}?/g.test(text)
   );
 };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -490,7 +462,7 @@ function Compile(template) {
     }
 
     this.options = extend(true, defaults, options);
-    this.co = this.options.co;
+    this.data = this.options.data;
     template = this.options.template;
 
     walk(template, function (node, next) {
@@ -552,15 +524,12 @@ Compile.prototype.compile.elementNodes = function (node) {
  */
 Compile.prototype.compile.textNodes = function (node) {
     if (node.textContent.trim() === '') return false;
-    var el = document.createTextNode('');
-    node.parentNode.insertBefore(el, node);
+
     this.bindDirective({
-        node: el,
+        node: node,
         name: 'text',
         expression: parse.text(node.textContent)
     });
-
-    node.parentNode.removeChild(node);
 };
 
 /**
@@ -569,9 +538,8 @@ Compile.prototype.compile.textNodes = function (node) {
  * @param {Object} options - directive options
  */
 Compile.prototype.bindDirective = function (options) {
-    new Directive(_extends({}, options, {
-        co: this.co
-    }));
+    options.compile = this;
+    new Directive(options);
 };
 
 /**
@@ -627,8 +595,7 @@ function initCompile(co) {
     co.$Compile = Compile;
 
     co.view = co.$Compile(co.options.template, {
-        data: co.data,
-        co: co
+        data: co.options.data
     }).view;
 }
 
@@ -651,13 +618,12 @@ function initComputed(co) {
             descriptor.enumerable = true;
             descriptor.configurable = true;
 
-            Object.defineProperty(co.data, prop, descriptor);
+            Object.defineProperty(co.options.data, prop, descriptor);
         }
     }
 }
 
 function init(co) {
-    initConstruct(co);
     initComputed(co);
     initCompile(co);
 }

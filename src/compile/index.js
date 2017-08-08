@@ -20,7 +20,7 @@ export default function Compile(template, options = {}) {
     }
 
     this.options = extend(true, defaults, options);
-    this.co = this.options.co;
+    this.data = this.options.data;
     template = this.options.template;
 
     walk(template, (node, next) => {
@@ -80,15 +80,12 @@ Compile.prototype.compile.elementNodes = function (node) {
  */
 Compile.prototype.compile.textNodes = function (node) {
     if (node.textContent.trim() === '') return false;
-    const el = document.createTextNode('');
-    node.parentNode.insertBefore(el, node);
+
     this.bindDirective({
-        node: el,
+        node,
         name: 'text',
         expression: parse.text(node.textContent),
     });
-
-    node.parentNode.removeChild(node);
 };
 
 /**
@@ -97,10 +94,8 @@ Compile.prototype.compile.textNodes = function (node) {
  * @param {Object} options - directive options
  */
 Compile.prototype.bindDirective = function (options) {
-    new Directive({
-        ...options,
-        co: this.co,
-    });
+    options.compile = this;
+    new Directive(options);
 };
 
 /**
@@ -127,8 +122,7 @@ Compile.prototype.bindAttribute = function (node, attribute) {
  * @return {Boolean}
  */
 Compile.prototype.bindPriority = function (node) {
-    let attrValue,
-        directive;
+    let attrValue, directive;
 
     for (let i = 0; i < configure.priority.length; i++) {
         directive = configure.priority[i];

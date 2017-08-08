@@ -9,9 +9,9 @@ export function generate(expression) {
     const dependencies = extractDependencies(expression);
     let dependenciesCode = '';
 
-    dependencies.map(dependency => dependenciesCode += `var ${dependency} = this.get("${dependency}"); `);
+    dependencies.map(dependency => dependenciesCode += `var ${dependency} = data["${dependency}"]; `);
 
-    return new Function(`${dependenciesCode}return ${expression};`);
+    return new Function(`data`, `${dependenciesCode}return ${expression};`);
 }
 
 export function extractDependencies(expression) {

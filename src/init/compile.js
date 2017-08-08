@@ -4,7 +4,6 @@ export default function initCompile(co) {
     co.$Compile = Compile;
 
     co.view = co.$Compile(co.options.template, {
-        data: co.data,
-        co,
+        data: co.options.data,
     }).view;
 }

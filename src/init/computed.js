@@ -15,8 +15,8 @@ export default function initComputed(co) {
 
             descriptor.enumerable = true;
             descriptor.configurable = true;
-            
-            Object.defineProperty(co.data, prop, descriptor);
+
+            Object.defineProperty(co.options.data, prop, descriptor);
         }
     }
 }
