@@ -22,6 +22,14 @@ configure = {
     moduleId: 'colon',
     entry: `${paths.source.root}index.js`,
     sourceMap: true,
+    banner: `
+/*!
+ * ${packages.name}.js v${packages.version}
+ * (c) 2017 ${packages.author}
+ * ${packages.repository.url.replace('.git', '')}
+ * Released under the MIT License.
+*/
+    `,
     targets: [{
         dest: `${paths.dist.root}${fileName}.js`,
         format: 'umd',

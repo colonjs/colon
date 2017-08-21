@@ -1,3 +1,11 @@
+
+/*!
+ * colon.js v1.3.1
+ * (c) 2017 JustClear <576839360@qq.com>
+ * https://github.com/colonjs/colon
+ * Released under the MIT License.
+*/
+    
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define('colon', factory) :
