@@ -5,11 +5,12 @@ const globals = [
     'escape', 'eval', 'isFinite', 'Number', 'String', 'parseFloat', 'parseInt',
 ];
 
-export function generate(expression) {
+export default function generate(expression) {
     const dependencies = extractDependencies(expression);
-    let dependenciesCode = '';
-
-    dependencies.map(dependency => dependenciesCode += `var ${dependency} = data["${dependency}"]; `);
+    const dependenciesCode = dependencies.reduce((prev, current) => {
+        prev += `var ${current} = data["${current}"]; `
+        return prev;
+    }, '');
 
     return new Function(`data`, `${dependenciesCode}return ${expression};`);
 }
@@ -18,11 +19,11 @@ export function extractDependencies(expression) {
     const dependencies = [];
 
     expression.replace(dependencyRE, (match, dependency) => {
-        if (
-            dependency !== undefined &&
-            dependencies.indexOf(dependency) === -1 &&
-            globals.indexOf(dependency) === -1
-        ) {
+        const isDefined = dependency => dependency !== undefined;
+        const hasDependency = (dependencies, dependency) => dependencies.includes(dependency);
+        const hasGlobal = (globals, dependency) => globals.includes(dependency);
+
+        if (isDefined(dependency) && !hasDependency(dependencies, dependency) && !hasGlobal(globals, dependency)) {
             dependencies.push(dependency);
         }
     });

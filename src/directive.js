@@ -1,5 +1,5 @@
 import directives from './directives/index';
-import { generate } from './compile/generate';
+import generate from './compile/generate';
 
 export default class Directive {
     constructor(options = {}) {
