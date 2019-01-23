@@ -14,9 +14,9 @@ export default {
         if (this.expression.indexOf(' in ') != -1) {
             const bracketRE = /\(((?:.|\n)+?)\)/g;
             const [item, data] = this.expression.split(' in ');
-            let matched = null;
+            const matched = bracketRE.exec(item);
 
-            if (matched = bracketRE.exec(item)) {
+            if (matched) {
                 const [item, index] = matched[1].split(',');
                 index ? this.indexName = index.trim() : '';
                 this.itemName = item.trim();
@@ -30,7 +30,7 @@ export default {
         this.expression = this.dataName;
     },
     update(data) {
-        if (data && !Array.isArray(data)) return;
+        if (data && !Array.isArray(data)) return false;
 
         const fragment = document.createDocumentFragment();
 

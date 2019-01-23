@@ -45,27 +45,24 @@ Compile.prototype.compile = {};
  * @param {Node} node
  * @return {Void|Boolean}
  */
-Compile.prototype.compile.elementNodes = function (node) {
-    let attributes = [].slice.call(node.attributes),
-        attrName = ``,
-        attrValue = ``,
-        directiveName = ``;
-
+Compile.prototype.compile.elementNodes = function(node) {
     if (node.hasAttributes() && this.bindPriority(node)) return false;
 
-    attributes.map(attribute => {
-        attrName = attribute.name;
-        attrValue = attribute.value.trim();
+    const attributes = [].slice.call(node.attributes);
 
-        if (attrName.indexOf(configure.identifier.bind) === 0 && attrValue !== '') {
-            directiveName = attrName.slice(configure.identifier.bind.length);
+    attributes.map(attribute => {
+        const attributeName = attribute.name;
+        const attributeValue = attribute.value.trim();
+
+        if (attributeName.indexOf(configure.identifier.bind) === 0 && attributeValue !== '') {
+            const directiveName = attributeName.slice(configure.identifier.bind.length);
 
             this.bindDirective({
                 node,
-                expression: attrValue,
+                expression: attributeValue,
                 name: directiveName,
             });
-            node.removeAttribute(attrName);
+            node.removeAttribute(attributeName);
         } else {
             this.bindAttribute(node, attribute);
         }
@@ -78,7 +75,7 @@ Compile.prototype.compile.elementNodes = function (node) {
  * @param {Node} node
  * @return {Void|Boolean}
  */
-Compile.prototype.compile.textNodes = function (node) {
+Compile.prototype.compile.textNodes = function(node) {
     if (node.textContent.trim() === '') return false;
 
     this.bindDirective({
@@ -93,7 +90,7 @@ Compile.prototype.compile.textNodes = function (node) {
  *
  * @param {Object} options - directive options
  */
-Compile.prototype.bindDirective = function (options) {
+Compile.prototype.bindDirective = function(options) {
     options.compile = this;
     new Directive(options);
 };
@@ -104,7 +101,7 @@ Compile.prototype.bindDirective = function (options) {
  * @param {Node} node
  * @param {Node} attribute
  */
-Compile.prototype.bindAttribute = function (node, attribute) {
+Compile.prototype.bindAttribute = function(node, attribute) {
     if (!hasInterpolation(attribute.value) || attribute.value.trim() == '') return false;
 
     this.bindDirective({
@@ -121,22 +118,20 @@ Compile.prototype.bindAttribute = function (node, attribute) {
  * @param {Node} node
  * @return {Boolean}
  */
-Compile.prototype.bindPriority = function (node) {
-    let attrValue, directive;
-
+Compile.prototype.bindPriority = function(node) {
     for (let i = 0; i < configure.priority.length; i++) {
-        directive = configure.priority[i];
-        attrValue = node.getAttribute(`${configure.identifier.bind}${directive}`);
+        const directive = configure.priority[i];
+        let attributeValue = node.getAttribute(`${configure.identifier.bind}${directive}`);
 
-        if (attrValue) {
-            attrValue = attrValue.trim();
-            if (!attrValue) return false;
+        if (attributeValue) {
+            attributeValue = attributeValue.trim();
+            if (!attributeValue) return false;
 
             node.removeAttribute(`${configure.identifier.bind}${directive}`);
             this.bindDirective({
                 node,
                 name: directive,
-                expression: attrValue,
+                expression: attributeValue,
             });
 
             return true;

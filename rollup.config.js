@@ -14,12 +14,12 @@ const output = options => ({
 });
 
 const banner = `
-/*!
-* ${fileName}.js v${version}
-* (c) 2017 ${ author }
-* ${repository.url.replace('.git', '')}
-* Released under the MIT License.
-*/
+/*
+ * ${fileName}.js v${version}
+ * (c) 2017 ${ author }
+ * ${repository.url.replace('.git', '')}
+ * Released under the MIT License.
+**/
 `;
 
 const configure = {
@@ -45,6 +45,7 @@ if (isProd) {
     configure.output = configure.output.map(output => {
         const format = output.format == 'umd' ? '' : `.${output.format}`;
         output.file = `dist/${fileName}${format}.min.js`;
+        delete output.banner;
         return output;
     });
     configure.plugins.push(minify());

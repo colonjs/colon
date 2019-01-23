@@ -1,10 +1,10 @@
 
-/*!
-* colon.js v1.3.2
-* (c) 2017 JustClear <576839360@qq.com>
-* https://github.com/colonjs/colon
-* Released under the MIT License.
-*/
+/*
+ * colon.js v1.3.2
+ * (c) 2017 JustClear <576839360@qq.com>
+ * https://github.com/colonjs/colon
+ * Released under the MIT License.
+**/
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
@@ -251,9 +251,9 @@
                 var ref = this.expression.split(' in ');
                 var item = ref[0];
                 var data = ref[1];
-                var matched = null;
+                var matched = bracketRE.exec(item);
 
-                if (matched = bracketRE.exec(item)) {
+                if (matched) {
                     var ref$1 = matched[1].split(',');
                     var item$1 = ref$1[0];
                     var index = ref$1[1];
@@ -271,7 +271,7 @@
         update: function update(data) {
             var this$1 = this;
 
-            if (data && !Array.isArray(data)) { return; }
+            if (data && !Array.isArray(data)) { return false; }
 
             var fragment = document.createDocumentFragment();
 
@@ -464,29 +464,26 @@
      * @param {Node} node
      * @return {Void|Boolean}
      */
-    Compile.prototype.compile.elementNodes = function (node) {
+    Compile.prototype.compile.elementNodes = function(node) {
         var this$1 = this;
-
-        var attributes = [].slice.call(node.attributes),
-            attrName = "",
-            attrValue = "",
-            directiveName = "";
 
         if (node.hasAttributes() && this.bindPriority(node)) { return false; }
 
-        attributes.map(function (attribute) {
-            attrName = attribute.name;
-            attrValue = attribute.value.trim();
+        var attributes = [].slice.call(node.attributes);
 
-            if (attrName.indexOf(configure.identifier.bind) === 0 && attrValue !== '') {
-                directiveName = attrName.slice(configure.identifier.bind.length);
+        attributes.map(function (attribute) {
+            var attributeName = attribute.name;
+            var attributeValue = attribute.value.trim();
+
+            if (attributeName.indexOf(configure.identifier.bind) === 0 && attributeValue !== '') {
+                var directiveName = attributeName.slice(configure.identifier.bind.length);
 
                 this$1.bindDirective({
                     node: node,
-                    expression: attrValue,
+                    expression: attributeValue,
                     name: directiveName,
                 });
-                node.removeAttribute(attrName);
+                node.removeAttribute(attributeName);
             } else {
                 this$1.bindAttribute(node, attribute);
             }
@@ -499,7 +496,7 @@
      * @param {Node} node
      * @return {Void|Boolean}
      */
-    Compile.prototype.compile.textNodes = function (node) {
+    Compile.prototype.compile.textNodes = function(node) {
         if (node.textContent.trim() === '') { return false; }
 
         this.bindDirective({
@@ -514,7 +511,7 @@
      *
      * @param {Object} options - directive options
      */
-    Compile.prototype.bindDirective = function (options) {
+    Compile.prototype.bindDirective = function(options) {
         options.compile = this;
         new Directive(options);
     };
@@ -525,7 +522,7 @@
      * @param {Node} node
      * @param {Node} attribute
      */
-    Compile.prototype.bindAttribute = function (node, attribute) {
+    Compile.prototype.bindAttribute = function(node, attribute) {
         if (!hasInterpolation(attribute.value) || attribute.value.trim() == '') { return false; }
 
         this.bindDirective({
@@ -542,22 +539,20 @@
      * @param {Node} node
      * @return {Boolean}
      */
-    Compile.prototype.bindPriority = function (node) {
-        var attrValue, directive;
-
+    Compile.prototype.bindPriority = function(node) {
         for (var i = 0; i < configure.priority.length; i++) {
-            directive = configure.priority[i];
-            attrValue = node.getAttribute(("" + (configure.identifier.bind) + directive));
+            var directive = configure.priority[i];
+            var attributeValue = node.getAttribute(("" + (configure.identifier.bind) + directive));
 
-            if (attrValue) {
-                attrValue = attrValue.trim();
-                if (!attrValue) { return false; }
+            if (attributeValue) {
+                attributeValue = attributeValue.trim();
+                if (!attributeValue) { return false; }
 
                 node.removeAttribute(("" + (configure.identifier.bind) + directive));
                 this.bindDirective({
                     node: node,
                     name: directive,
-                    expression: attrValue,
+                    expression: attributeValue,
                 });
 
                 return true;
@@ -568,9 +563,7 @@
     };
 
     function initCompile(co) {
-        co.$Compile = Compile;
-
-        co.view = co.$Compile(co.options.template, {
+        co.view = Compile(co.options.template, {
             data: co.options.data,
         }).view;
     }
