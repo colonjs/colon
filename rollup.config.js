@@ -1,44 +1,53 @@
-import babel from 'rollup-plugin-babel';
-import uglify from 'rollup-plugin-uglify';
-import sourcemaps from 'rollup-plugin-sourcemaps';
+import buble from 'rollup-plugin-buble';
+import alias from 'rollup-plugin-alias';
+import minify from 'rollup-plugin-babel-minify';
+import resolve from 'rollup-plugin-node-resolve';
 
-const packages = require('./package.json');
-const paths = {
-    root: '/',
-    source: {
-        root: './src/',
-    },
-    dist: {
-        root: './dist/',
-    },
-};
+const isProd = process.env.NODE_ENV === 'production';
+const { moduleName, name: fileName, version, author, repository } = require('./package.json');
+const getFilePath = (type = '') => `dist/${fileName}${type == '' ? '' : '.'}${type}.js`;
+const output = options => ({
+    banner,
+    name: moduleName,
+    sourcemap: true,
+    ...options,
+});
 
 const banner = `
 /*!
-* ${packages.name}.js v${packages.version}
-* (c) 2017 ${packages.author}
-* ${packages.repository.url.replace('.git', '')}
+* ${fileName}.js v${version}
+* (c) 2017 ${ author }
+* ${repository.url.replace('.git', '')}
 * Released under the MIT License.
 */
 `;
 
-const fileName = (process.env.NODE_ENV === 'development' ? packages.name : `${packages.name}.min`).toLowerCase();
-
 const configure = {
-    input: `${paths.source.root}index.js`,
-    output: [{
-        banner,
+    input: 'src/index.js',
+    output: [output({
+        file: getFilePath(),
         format: 'umd',
-        file: `${paths.dist.root}${fileName}.js`,
-        name: packages.moduleName,
-        sourcemap: true,
-    }],
+    }), output({
+        file: getFilePath('es'),
+        format: 'es',
+    })],
     plugins: [
-        babel(),
-        sourcemaps(),
+        alias({
+            init: './init/index',
+        }),
+        buble(),
+        resolve(),
     ],
+    external: [],
 };
 
-if (process.env.NODE_ENV === 'production') configure.plugins.push(uglify());
+if (isProd) {
+    configure.output = configure.output.map(output => {
+        const format = output.format == 'umd' ? '' : `.${output.format}`;
+        output.file = `dist/${fileName}${format}.min.js`;
+        return output;
+    });
+    configure.plugins.push(minify());
+}
 
-export default configure;
+module.exports = configure;

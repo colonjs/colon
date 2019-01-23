@@ -1,4 +1,4 @@
-import init from './init/index';
+import init from 'init';
 
 export default function colon(options) {
     if (!(this instanceof colon)) return new colon(options);
