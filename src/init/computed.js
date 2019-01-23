@@ -1,22 +1,17 @@
 export default function initComputed(co) {
     const computed = co.options.computed;
 
-    if (!computed) return;
+    if (!computed) return false;
 
-    let descriptor, prop;
+    for (let key in computed) {
+        const value = computed[key];
 
-    for (prop in computed) {
-        descriptor = computed[prop];
-
-        if (typeof descriptor === 'function') {
-            descriptor = {
-                get: descriptor,
-            };
-
-            descriptor.enumerable = true;
-            descriptor.configurable = true;
-
-            Object.defineProperty(co.options.data, prop, descriptor);
+        if (typeof value === 'function') {
+            Object.defineProperty(co.options.data, key, {
+                get: value,
+                enumerable: true,
+                configurable: true,
+            });
         }
     }
 }
